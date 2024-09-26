@@ -1,0 +1,134 @@
+<style>
+  .banner-container {
+    width: 100%;
+    position: relative;
+  }
+
+  .slider .slick-slide {
+    display: flex;
+    justify-content: center;
+  }
+
+  .slider img {
+    width: 100%;
+    height: auto;
+  }
+
+  .hidden-mobile {
+    display: none;
+  }
+
+  .hidden-desktop {
+    display: block;
+  }
+
+  @media (max-width: 767px) {
+    .hidden-mobile {
+      display: block !important; /* Mostrar en móvil */
+    }
+
+    .hidden-desktop {
+      display: none !important; /* Ocultar en móvil */
+    }
+  }
+
+  @media (min-width: 768px) {
+    .hidden-mobile {
+      display: none !important; /* Ocultar en escritorio */
+    }
+
+    .hidden-desktop {
+      display: block !important; /* Mostrar en escritorio */
+    }
+  }
+</style>
+
+<div class="banner-container">
+  <div class="slider">
+    {% for banner in section.blocks %}
+      <div>
+        <a href="{{ banner.settings.url_banner }}">
+          <img class="hidden-desktop" src="{{ banner.settings.desktop_image | img_url: 'master' }}" alt="Desktop Banner">
+          <img class="hidden-mobile" src="{{ banner.settings.mobile_image | img_url: 'master' }}" alt="Mobile Banner">
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Incluir jQuery antes de Slick -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- Incluir Slick Slider JS y CSS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+
+<script>
+  $(document).ready(function(){
+    $('.slider').slick({
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      adaptiveHeight: true,
+      autoplay: true,               // Activar el deslizamiento automático
+      autoplaySpeed: 5000,          // 5000 milisegundos (5 segundos) entre deslizamientos
+      responsive: [
+        {
+          breakpoint: 767,
+          settings: {
+            dots: false,
+          }
+        }
+      ]
+    });
+  });
+</script>
+
+
+{% schema %}
+{
+  "name": "Slider Responsive",
+  "class": "desktop-mobile-slider-banner",
+  "tag": "section",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Imagen del Banner",
+      "settings": [
+        {
+          "type": "url",
+          "id": "url_banner",
+          "label": "URL del Banner",
+          "default": "/collections/all"
+        },
+        {
+          "type": "image_picker",
+          "id": "desktop_image",
+          "label": "Imagen para Escritorio"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Imagen para Móvil"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Slider Responsive",
+      "category": "Image",
+      "blocks": [
+        {
+          "type": "banner"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+
